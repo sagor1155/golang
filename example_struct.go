@@ -11,6 +11,14 @@ var (
 	ErrOverdraftIncurred   = errors.New("Overdraft Incurred!")
 )
 
+type Depositable interface {
+	Deposit(float64)
+}
+
+type Withdrawable interface {
+	Withdraw(float64) (float64, error)
+}
+
 type BankAccount struct {
 	Owner   string
 	balance float64
@@ -35,24 +43,38 @@ func (ba *BankAccount) Withdraw(amount float64) (float64, error) {
 }
 
 // struct embedded with another struct
-type OverdrafttableBankAccount struct {
-	account BankAccount
-	Fee     float64
+type OverdraftableBankAccount struct {
+	BankAccount
+	Fee float64
 }
 
-func (oba *OverdrafttableBankAccount) Withdraw(amount float64) (float64, error) {
+func (oba *OverdraftableBankAccount) Withdraw(amount float64) (float64, error) {
 	var err error
-	if oba.account.balance < amount {
-		oba.account.balance -= oba.Fee
+	if oba.balance < amount {
+		oba.balance -= oba.Fee
 		err = ErrOverdraftIncurred
 	}
-	oba.account.balance -= amount
-	return oba.account.balance, err
+	oba.balance -= amount
+	return oba.balance, err
+}
+
+func Transfer(debtor Withdrawable, creditor Depositable, amount float64) error {
+	balance, err := debtor.Withdraw(amount)
+
+	switch err {
+	case ErrInsufficientBalance:
+		return err
+	case ErrOverdraftIncurred:
+		log.Printf("debtor incurred overdraft: new balance is %.2f", balance)
+	}
+
+	creditor.Deposit(amount)
+	return nil
 }
 
 func main() {
 	fmt.Println("Example of STRUCT")
-	ba := BankAccount{"Joe", 100}
+	ba := &BankAccount{"Joe", 100}
 	fmt.Println("Balance:", ba.Balance())
 	ba.Deposit(30.0)
 	fmt.Println("Balance after deposit:", ba.Balance())
@@ -61,17 +83,17 @@ func main() {
 	fmt.Println("Error:", err)
 	fmt.Println("Withdraw amount:", balance)
 
-	oba := OverdrafttableBankAccount{BankAccount{"Billy", 50}, 20}
-	fmt.Println(oba.account.Owner, "has:", oba.account.balance, "bucks")
-	balance, err = oba.account.Withdraw(20)
+	oba := &OverdraftableBankAccount{BankAccount{"Billy", 50}, 20}
+	fmt.Println(oba.Owner, "has:", oba.balance, "bucks")
+	balance, err = oba.Withdraw(20)
 	if err == nil {
-		fmt.Println("After withdraw,", oba.account.Owner, "has:", oba.account.balance, "bucks")
+		fmt.Println("After withdraw,", oba.Owner, "has:", oba.balance, "bucks")
 	}
 
 	_, err = oba.Withdraw(150)
 	if err != nil {
 		log.Println(err)
-		log.Printf("Overdraft incurred: balance is now %.2f\n", oba.account.Balance())
+		log.Printf("Overdraft incurred: balance is now %.2f\n", oba.Balance())
 	}
 
 	balance, err = ba.Withdraw(150)
@@ -79,4 +101,22 @@ func main() {
 		fmt.Println(err)
 	}
 
+	// ba.Deposit(50)
+	fmt.Println("Acount 1 balance:", ba.Balance(), ", Account 2 balance:", oba.Balance())
+
+	err = Transfer(ba, oba, 150)
+	if err != nil {
+		log.Printf("Transfer Unsuccessfull: %v", err)
+	} else {
+		log.Printf("Transfer Successfull")
+		fmt.Println("Acount 1 balance:", ba.Balance(), ", Account 2 balance:", oba.Balance())
+	}
+
+	err = Transfer(oba, ba, 150)
+	if err != nil {
+		log.Printf("Transfer Unsuccessfull: %v", err)
+	} else {
+		log.Printf("Transfer Successfull")
+		fmt.Println("Acount 1 balance:", ba.Balance(), ", Account 2 balance:", oba.Balance())
+	}
 }
