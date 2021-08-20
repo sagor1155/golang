@@ -17,6 +17,7 @@ GO:
 11. struct
 12. typedef
 13. garbage collector
+14. Design pattern
 */
 
 func calc(num1 int, num2 int) (int, int) {
