@@ -4,20 +4,19 @@ import "fmt"
 
 /*
 GO:
-1. array
-2. Dynamic memory - allocation/deallocation
-3. OOP (class, object, encapsulation polymorphism, inheritence, abstraction, interface)
-4. static
-5. Pointer
-6. slice
-7. maps
-8. exception handling
-9. File I/O
-10. NULL pointer
-11. struct
-12. typedef
-13. garbage collector
-14. Design pattern
+1. Memory management/garbage collector/allocation/deallocation
+2. OOP (class, object, encapsulation(private, public), polymorphism(interface), inheritence(composition), abstraction)
+3. static (closure)
+4. Pointer, reference
+5. array, slice
+6. maps
+7. exception handling
+8. File I/O
+9. NULL pointer (nil)
+10. struct (type name struct)
+11. typedef
+12. Design pattern
+13. Naming convention
 */
 
 func calc(num1 int, num2 int) (int, int) {
@@ -102,4 +101,10 @@ func main() {
 	sum, diff := calc(xx, yy)
 	fmt.Println("Sum", sum)
 	fmt.Println("Diff", diff)
+
+	nums := []int{1, 2, 5, 10, 3, 4}
+	for index, value := range nums {
+		fmt.Println(index, value)
+	}
+
 }
