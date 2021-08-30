@@ -36,4 +36,5 @@ func main() {
 	fmt.Println("Receiver Function")
 	randomEvent := event{"s3put", "s3get", "s3delete"}
 	randomEvent.print()
+
 }

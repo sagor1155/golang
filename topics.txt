@@ -1,0 +1,19 @@
+
+GO Topics:
+1. Memory management/garbage collector/allocation/deallocation
+2. OOP (class, object, encapsulation(private, public), polymorphism(interface), inheritence(composition), abstraction)
+3. static (closure)
+4. Pointer, reference
+5. array, slice
+6. maps
+7. exception handling
+8. File I/O
+9. NULL pointer (nil)
+10. struct (type name struct)
+11. typedef
+12. Design pattern
+13. Naming convention
+14. defer, panic
+15. receiver function 
+16. http, REST
+
