@@ -6,8 +6,8 @@ import (
 )
 
 func main() {
-	var dir, file string
-	dir, file = path.Split("/home/sagor/work/main.css")
-	fmt.Println("Directory:", dir)
+	// var dir, file string
+	_, file := path.Split("/home/sagor/work/main.css")
+	// fmt.Println("Directory:", dir)
 	fmt.Println("file:", file)
 }

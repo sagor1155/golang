@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 	"unicode/utf8"
 )
 
@@ -84,5 +85,8 @@ func main() {
 	// commandline_arguments()
 	// string_length()
 	constant_and_iota()
+
+	hour := time.Now().Hour()
+	fmt.Println("Hour now:", hour)
 
 }
