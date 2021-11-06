@@ -5,14 +5,14 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
-const MaxTurn = 5
-
-func main() {
+func luckyNumber() {
 	fmt.Println("Lucky Number")
 	rand.Seed(time.Now().UnixNano())
+	const MaxTurn = 5
 
 	args := os.Args[1:]
 	if len(args) < 1 {
@@ -43,4 +43,25 @@ func main() {
 	}
 
 	fmt.Println("\n*** YOU LOST! ***")
+}
+
+func wordSearch() {
+	const corpus = "" + "Lazy cat jumps again and again and again"
+	words := strings.Fields(corpus)
+
+	query := os.Args[1:]
+
+	for _, q := range query {
+		for i, w := range words {
+			if strings.EqualFold(q, w) {
+				fmt.Printf("#%-2d: %q\n", i+1, w)
+				break
+			}
+		}
+	}
+}
+
+func main() {
+	// luckyNumber()
+	wordSearch()
 }
