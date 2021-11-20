@@ -52,7 +52,14 @@ func wordSearch() {
 	query := os.Args[1:]
 
 	for _, q := range query {
+	search_label:
 		for i, w := range words {
+			// add word filter
+			switch q {
+			case "and", "or", "cat":
+				// labeled break
+				break search_label
+			}
 			if strings.EqualFold(q, w) {
 				fmt.Printf("#%-2d: %q\n", i+1, w)
 				break
