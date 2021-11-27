@@ -2,9 +2,14 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
+
+	s "github.com/inancgumus/prettyslice"
+	"github.com/inancgumus/screen"
 )
 
-func main() {
+func slicePracticeBasics() {
 	fmt.Println("Example for Slices: Dynamic array in GO")
 	/*
 		array is static (can't grow and shrink)
@@ -59,4 +64,60 @@ func main() {
 		head := fmt.Sprintf("page #%d", (from / pageSize))
 		fmt.Printf("%s  %v\n", head, currentPage)
 	}
+
+	agesArray := [3]int{1, 2, 3} // backing array for slice ages
+	ages := agesArray[0:3]       // shares the same memory as agesArray
+	ages1 := ages[0:1]
+	ages2 := ages[1:3]
+
+	fmt.Printf("agesArray %v\n", agesArray)
+	fmt.Printf("ages %v\n", ages)
+	fmt.Printf("ages1 %v\n", ages1)
+	fmt.Printf("ages2 %v\n", ages2)
+
+	ages[0] = 33
+	ages[2] = 77
+
+	fmt.Println("---------------------------")
+	fmt.Printf("agesArray %v\n", agesArray)
+	fmt.Printf("ages %v\n", ages)
+	fmt.Printf("ages1 %v\n", ages1)
+	fmt.Printf("ages2 %v\n", ages2)
+
+	fmt.Printf("addr agesArray %d\n", &agesArray[0])
+	fmt.Printf("addr ages %d\n", &ages[0])
+}
+
+func testAppendBehaviour() {
+	s.PrintBacking = true
+	s.MaxPerLine = 30
+	s.Width = 150
+
+	var nums []int
+
+	screen.Clear()
+	for cap(nums) <= 128 {
+		screen.MoveTopLeft()
+		s.Show("nums", nums)
+		nums = append(nums, rand.Intn(9)+1)
+		time.Sleep(time.Second / 4)
+	}
+}
+
+func testAppendGrowthRate() {
+	ages, oldCap := []int{1}, 1.0
+
+	for len(ages) < 5e5 {
+		ages = append(ages, 1)
+		c := float64(cap(ages))
+		if c != oldCap {
+			fmt.Printf("len:%-10d cap:%-10g growth:%.2f\n", len(ages), c, c/oldCap)
+		}
+		oldCap = c
+	}
+}
+
+func main() {
+	// testAppendBehaviour()
+	testAppendGrowthRate()
 }
