@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	s "github.com/inancgumus/prettyslice"
@@ -42,7 +43,7 @@ func slicePracticeBasics() {
 	newMsg := msg[2:]
 	fmt.Printf("%#v\n", newMsg)
 
-	mymsg := append(msg[:4], '!') //actual input slcie 'msg' will also be updated??? note that
+	mymsg := append(msg[:4], '!') //actual input slice 'msg' will also be updated??? note that
 	fmt.Printf("%#v\n", msg)
 	fmt.Printf("%#v\n", mymsg)
 
@@ -117,7 +118,34 @@ func testAppendGrowthRate() {
 	}
 }
 
+func comparable() {
+	// arrays
+	books := [3]string{"dracula", "1984", "island"}
+	newBooks := [3]string{"ulysses", "fire"}
+	books = newBooks // can't be assigned to each other if array type (element type + length) is not same
+
+	// slices
+
+}
+
 func main() {
 	// testAppendBehaviour()
-	testAppendGrowthRate()
+	// testAppendGrowthRate()
+
+	// words := []string{"lucy", "in", "the", "sky", "with", "diamonds"}
+	// words = append(words[:1], "is", "everywhere")
+	// fmt.Println(words)
+	// words = append(words, words[len(words)+1:cap(words)]...)
+	// fmt.Println(words)
+
+	str := "all my troubles seemed so far away oh I believe in yesterday now it looks as though they are here to stay"
+	lyric := strings.Split(str, " ")
+	fmt.Printf("%#v\n", lyric)
+	lyric = append([]string{"yesterday"}, lyric...)
+	fmt.Println(lyric)
+	const N, M = 8, 13
+	lyric = append(lyric, lyric[N:M]...)
+	fmt.Println(lyric)
+	lyric = append(lyric[:N], lyric[M:]...)
+	fmt.Println(lyric)
 }

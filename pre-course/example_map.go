@@ -11,7 +11,10 @@ type Person struct {
 
 func main() {
 	fmt.Println("map in go")
-	people := [...]*Person{{"aa", []string{"apple", "mango"}}, {"bb", []string{"mango", "banana"}}}
+	people := [...]*Person{
+		{"aa", []string{"apple", "mango"}},
+		{"bb", []string{"mango", "banana"}},
+	}
 
 	// likemap := make(map[string][]*Person)
 	likemap := map[string][]*Person{} // same as above
