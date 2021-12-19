@@ -20,13 +20,14 @@ func main() {
 	}
 
 	// var names []byte
+
 	// optimize for huge number of files in a directory
 	// pre allocate names slice
 	// total := len(files) * 256 // number of files * average max file name size = 255 + 1 for '\n'
 	// names := make([]byte, 0, total)
 	// fmt.Printf("Total allocated space: %d bytes.\n", total)
 
-	// get the exact size
+	// get the exact size, more optimized in terms of memory
 	var total_exact int
 	for _, file := range files {
 		if file.Size() == 0 {
