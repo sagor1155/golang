@@ -1,7 +1,0 @@
-SLICE:
-------
-1. After the capacity of 1024, the append function grows at a slower rate, about 25%.
-2. 
-3. 
-4. 
-5. 

@@ -49,19 +49,10 @@ func main() {
 		fmt.Println(args[0], "in turkish is", english[args[0]])
 	}
 
-	/* map header
+	/* map header:
 	map value is only a pointer (contains address) to a map header
 	map header contains another pointer (Buckets) to the real data
 	passing map to a function or, assigning to a varable is very cheap as we are just passing the pointer
-	header: (struct)
-	-------
-	Count
-	Flags
-	Buckets	(pointer to the actual map data)
-	Overflow
-	Hash0
-	...
-	a lot of fields
 	*/
 	dict := english // they are pointing to same map header, changing one map will change the other
 	dict["good"] = "guzel"
@@ -87,3 +78,17 @@ func main() {
 	}
 
 }
+
+/*
+type hmap struct {
+	count      int
+	flags      uint8
+	B          uint8
+	noverflow  uint16
+	hash0      uint32
+	buckets    unsafe.Pointer
+	oldbuckets unsafe.Pointer
+	nevacuate  uintptr
+	extra      *mapextra
+}
+*/
