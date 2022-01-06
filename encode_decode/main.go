@@ -325,10 +325,74 @@ Gezegenin maymun soyundan gelen canlıları öyle ilkeldir ki dijital kol saatin
 	fmt.Printf("%s = % [1]x\n", word)
 }
 
+// StringHeader is used by a string value
+// In practice you should use : reflect.Header
+type StringHeader struct {
+	// points to a backing array's item
+	pointer uintptr // where it starts
+	length  int     // where it ends
+}
+
+// dump prints the string header of a string value
+func dump(s string) {
+	ptr := *(*StringHeader)(unsafe.Pointer(&s))
+	fmt.Printf("%q: %+v\n", s, ptr)
+}
+
+func CheckStringHeader() {
+	hello := "Hello"
+
+	// empty string
+	dump("")
+	/*
+		"": {pointer:0 length:0}
+		there's no backing array for empty string
+	*/
+
+	// same string
+	dump(hello)
+	dump("Hello")
+	dump("Hello")
+	/*
+		"Hello": {pointer:4807070 length:5}
+		"Hello": {pointer:4807070 length:5}
+		"Hello": {pointer:4807070 length:5}
+
+		shares the same backing array
+	*/
+
+	// slicing
+	for i := range hello {
+		dump(hello[i : i+1])
+	}
+	/*
+		"H": {pointer:4807070 length:1}
+		"e": {pointer:4807071 length:1}
+		"l": {pointer:4807072 length:1}
+		"l": {pointer:4807073 length:1}
+		"o": {pointer:4807074 length:1}
+
+		Slicing a string doesn't create new backing array. So slicing a string is efficient.
+	*/
+
+	// conversion
+	dump(string([]byte(hello)))
+	dump(string([]byte(hello)))
+	dump(string([]byte(hello)))
+	/*
+		"Hello": {pointer:824633803296 length:5}
+		"Hello": {pointer:824633803336 length:5}
+		"Hello": {pointer:824633803376 length:5}
+
+		Conversion allocates new backing array.
+	*/
+}
+
 func main() {
-	TestRuneBasics()
-	String2ByteSliceConversion()
-	CountBytesAndRunesInString()
-	IndexAndSlicingString()
-	DecodeString()
+	// TestRuneBasics()
+	// String2ByteSliceConversion()
+	// CountBytesAndRunesInString()
+	// IndexAndSlicingString()
+	// DecodeString()
+	CheckStringHeader()
 }
