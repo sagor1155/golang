@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"unicode/utf8"
 )
@@ -21,23 +22,51 @@ func main() {
 	// fmt.Printf("%-10c % 10x\n", mychar, string(mychar))
 
 	// string to byte slice conversion
+	// str := "Yūgen ☯ 💀"
+	// fmt.Printf("%s\n", str)
+	// fmt.Printf("%d bytes\n", len(str))                    // number of bytes in string
+	// fmt.Printf("%d runes\n", utf8.RuneCountInString(str)) // number of runes
+
+	// sbytes := []byte(str) // creates new backing array
+	// fmt.Printf("%s\n", sbytes)
+	// fmt.Printf("%d bytes\n", len(sbytes))
+	// fmt.Printf("%d runes\n", utf8.RuneCount(sbytes))
+
+	// sbytes[0] = 'N'
+	// sbytes[1] = 'Y'
+	// sbytes[2] = 'C'
+	// fmt.Printf("%s\n", sbytes)
+	// fmt.Printf("%s\n", str)
+
+	// str = string(sbytes) // creates new backing array
+	// fmt.Printf("%s\n", str)
+
+	// indexing and slicing string
+	// str := "Yūgen ☯ 💀"
+	// for i, r := range str {
+	// 	fmt.Printf("str[%2d] = % -12x = %q\n", i, string(r), r)
+	// }
+	// fmt.Println()
+	// fmt.Printf("1st byte   : %c\n", str[0])
+	// fmt.Printf("2nd byte   : %c\n", str[1])   // indexing a string returns a byte value
+	// fmt.Printf("2nd rune   : %s\n", str[1:3]) // slicing a string also returns a string value
+	// fmt.Printf("last rune  : %s\n", str[len(str)-4:])
+
+	// decode string
 	str := "Yūgen ☯ 💀"
-	fmt.Printf("%s\n", str)
-	fmt.Printf("%d bytes\n", len(str))                    // number of bytes in string
-	fmt.Printf("%d runes\n", utf8.RuneCountInString(str)) // number of runes
+	for i := 0; i < len(str); {
+		r, size := utf8.DecodeRuneInString(str[i:])
+		fmt.Printf("%c\n", r)
+		i += size
+	}
 
-	sbytes := []byte(str) // creates new backing array
-	fmt.Printf("%s\n", sbytes)
-	fmt.Printf("%d bytes\n", len(sbytes))
-	fmt.Printf("%d runes\n", utf8.RuneCount(sbytes))
+	// modify string
+	word := []byte("abcdef")
+	fmt.Printf("%s = % [1]x\n", word)
+	_, size := utf8.DecodeRune(word)
+	copy(word[:size], bytes.ToUpper(word[:size]))
+	fmt.Printf("%s = % [1]x\n", word)
 
-	sbytes[0] = 'N'
-	sbytes[1] = 'Y'
-	sbytes[2] = 'C'
-	fmt.Printf("%s\n", sbytes)
-	fmt.Printf("%s\n", str)
-
-	str = string(sbytes) // creates new backing array
-	fmt.Printf("%s\n", str)
-
+	// string header
+	// why strings are immutable?
 }
